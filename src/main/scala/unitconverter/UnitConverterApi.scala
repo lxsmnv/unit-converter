@@ -1,41 +1,38 @@
 package unitconverter
 
-import cats.effect.IO
-import org.http4s._
-import org.http4s.dsl._
-import org.http4s.dsl.io._
-import unitconverter.model.TransformationResult
-import org.http4s.circe._
 import io.circe.syntax._
 import io.circe._
 import io.circe.literal._
-
+import io.circe.generic.auto._
+import cats.effect._
+import org.http4s._
+import org.http4s.dsl.{io, _}
+import org.http4s.dsl.io._
+import unitconverter.model.{ErrorResult, TransformationResult}
+import org.http4s.circe._
 import unitconverter.parser.UnitParser
 
 object  UnitConverterApi {
+
 
   object UnitsQueryParamMatcher extends QueryParamDecoderMatcher[String]("units")
 
   def route: HttpRoutes[IO] = HttpRoutes.of[IO] {
     case GET ->  Root / "si" :? UnitsQueryParamMatcher(units) => {
-      Ok("Service is online.")
+      processParameter(units)
     }
   }
 
-
   private def processParameter(param: String) = {
-     val units = UnitParser.parse(param)
-     val resOrError =
-       UnitTransformer
-       .createTransformer(units)
-       .map(tr => TransformationResult("", tr.factor))
+     val resultOrError = for {
+         units <- UnitParser.parse(param)
+         tr <- UnitTransformer.createTransformer(units)
+       } yield TransformationResult(tr.to.name, tr.factor)
 
-    resOrError match {
-      case Right(tr) =>  Ok(tr.asJson)
-      case Left(e)   =>  BadRequest(e)
-    }
-
-
+     resultOrError match {
+        case Right(tr) =>  Ok(tr.asJson)
+        case Left(e)   =>  BadRequest(ErrorResult(e).asJson)
+     }
   }
 
 }

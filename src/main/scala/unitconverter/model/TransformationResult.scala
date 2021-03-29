@@ -1,3 +1,12 @@
 package unitconverter.model
 
-case class TransformationResult(unit_name: String, multiplication_factor: Double)
+import io.circe.generic.extras._
+
+@ConfiguredJsonCodec
+case class TransformationResult(unitName: String, multiplicationFactor: Double)
+
+object TransformationResult {
+  implicit val config: Configuration = Configuration.default.withSnakeCaseMemberNames
+}
+
+

@@ -1,6 +1,7 @@
 package unitconverter
 
 import cats.effect.{ExitCode, IO, IOApp}
+import io.circe.generic.extras.Configuration
 import org.http4s._
 import org.http4s.dsl.io._
 import org.http4s.implicits._
@@ -15,12 +16,10 @@ object UnitConverter extends IOApp {
   implicit val forkJoinPool = scala.concurrent.ExecutionContext.fromExecutor(es)
 
   override def run(args: List[String]): IO[ExitCode] = {
-    // UnitParser.parse("")
-    // UnitTransformer.createTransformer()
-    IO.pure(ExitCode.Success)
+    startServer()
   }
 
-  def startServer() =
+  private def startServer() =
     BlazeServerBuilder[IO](forkJoinPool)
       .bindHttp()
       .withNio2(true)

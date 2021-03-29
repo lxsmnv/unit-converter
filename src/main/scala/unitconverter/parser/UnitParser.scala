@@ -1,15 +1,19 @@
 package unitconverter.parser
-import unitconverter.model.CombineOperation.Mul
 import unitconverter.model.{CombineOperation, ComplexUnit, MeasurementUnit, SingleUnit}
 
 import scala.util.parsing.combinator._
 
 object UnitParser extends RegexParsers {
-  def unit: Parser[MeasurementUnit]   = """\xF8|'|"|[a-zA-Z]+""".r ^^ { case name => SingleUnit(name) }
-  def mul: Parser[MeasurementUnit => MeasurementUnit]    = "*" ~ factor ^^ { case "*" ~ b => ComplexUnit(CombineOperation.Mul, _, b) }
-  def div: Parser[MeasurementUnit => MeasurementUnit]    = "/" ~ factor ^^ { case "/" ~ b => ComplexUnit(CombineOperation.Div, _, b) }
-  def term:   Parser[MeasurementUnit]    = factor ~ rep(mul | div) ^^ { case a ~ b => b.foldLeft(a)((acc,f) => f(acc)) }
-  def factor: Parser[MeasurementUnit]    = unit | "(" ~> term <~ ")"
+  private def unit: Parser[MeasurementUnit]                   = """m\u00B2|m\u00B3|°|'|"|[a-zA-Z]+""".r ^^ { case name => SingleUnit(name) }
+  private def mul: Parser[MeasurementUnit => MeasurementUnit] = "*" ~ factor ^^ { case op ~ b => ComplexUnit(CombineOperation.Mul, _, b) }
+  private def div: Parser[MeasurementUnit => MeasurementUnit] = "/" ~ factor ^^ { case op ~ b => ComplexUnit(CombineOperation.Div, _, b) }
+  private def term: Parser[MeasurementUnit]                   = factor ~ rep(mul | div) ^^ { case a ~ b => b.foldLeft(a)((acc,f) => f(acc)) }
+  private def factor: Parser[MeasurementUnit]                 = unit | "(" ~> term <~ ")"
 
-  def parse(line: String) = parseAll(term, line).get
+  def parse(line: String): Either[String, MeasurementUnit] =
+    parseAll(term, line) match {
+      case Success(matched, _) => Right(matched)
+      case Failure(msg, _)     => Left(msg)
+      case Error(msg, _)       => Left(msg)
+    }
 }
