@@ -22,7 +22,7 @@ libraryDependencies += "org.scala-lang.modules" %% "scala-parser-combinators" % 
 libraryDependencies += "org.specs2" %% "specs2-cats" % "4.9.4" % Test
 libraryDependencies += "org.specs2" %% "specs2-core" % "4.10.6" % Test
 
-
+dockerExposedPorts := Seq(8080)
 scalacOptions ++= Seq("-deprecation", "-Ymacro-annotations")
 
 enablePlugins(JavaAppPackaging)
