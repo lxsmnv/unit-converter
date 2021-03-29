@@ -1,3 +1,7 @@
 package unitconverter.model
 
-case class ErrorResult(message: String)
+/**
+ * Error response
+ * @param error error message
+ */
+case class ErrorResult(error: String)

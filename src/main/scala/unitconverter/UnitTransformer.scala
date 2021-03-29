@@ -3,6 +3,12 @@ package unitconverter
 import unitconverter.model.CombineOperation.{Div, Mul}
 import unitconverter.model.{ComplexUnit, MeasurementUnit, SingleUnit}
 
+/**
+ * Unit transformation
+ * @param factor transformation factor
+ * @param from source unit
+ * @param to target unit
+ */
 case class UnitTransformer(factor: Double,
                            from: MeasurementUnit,
                            to: MeasurementUnit
@@ -10,6 +16,7 @@ case class UnitTransformer(factor: Double,
 
 object UnitTransformer {
 
+  // Base transformations
   private val unitTransformers = Seq(
     UnitTransformer( 60.0, SingleUnit("minute", Some("min")), SingleUnit("s")),
     UnitTransformer(3600.0, SingleUnit("hour", Some("h")), SingleUnit("s")),
@@ -22,17 +29,25 @@ object UnitTransformer {
     UnitTransformer(1000, SingleUnit("tonne", Some("t")), SingleUnit("kg"))
   )
 
+  // Transformation mapping "unit name" -> UnitTransformer
   private val conversionTable: Map[String, UnitTransformer] =
     (
     unitTransformers
       .flatMap(t => t.from.names.map(name => name -> t))
       .toMap
     ++
+    // SI to SI unit transformation e.g. rad to rad
     unitTransformers
       .flatMap(t => t.to.names.map(name => name -> UnitTransformer(1.0, t.to, t.to)))
       .toMap
     )
 
+  /**
+   * This function will create transformer for complex unit
+   *
+   * @param unit
+   * @return [[UnitTransformer]]
+   */
   def createTransformer(unit: MeasurementUnit): Either[String, UnitTransformer] =
     unit match {
       case SingleUnit(name, _) => conversionTable.get(name).toRight[String](s"Unit $name not found")
