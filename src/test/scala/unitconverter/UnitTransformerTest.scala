@@ -7,25 +7,25 @@ import unitconverter.model.{ComplexUnit, SingleUnit}
 
 class UnitTransformerTest extends Specification with Matchers {
 
-  import UnitTransformer._
+  import UnitTransformation._
 
   "UnitTransformer" should {
     "create unit transformer for a minute unit" in {
-      val expected = UnitTransformer(60, SingleUnit("minute", Some("min")), SingleUnit("s"))
+      val expected = UnitTransformation(60, SingleUnit("s"))
       createTransformer(SingleUnit("minute")) must beRight(expected)
     }
 
     "create unit transformer for degree/minute" in {
-      val input = ComplexUnit(Div, SingleUnit("degree", Some("d")), SingleUnit("minute", Some("min")))
+      val input = ComplexUnit(Div, SingleUnit("degree"), SingleUnit("minute"))
       val expectedUnit = ComplexUnit(Div, SingleUnit("rad"), SingleUnit("s"))
-      val expectedResult = UnitTransformer(Math.PI/(180*60), input, expectedUnit)
+      val expectedResult = UnitTransformation(Math.PI/(180*60), expectedUnit)
       createTransformer(input) must beRight(expectedResult)
     }
 
     "create unit transformer for degree*minute" in {
       val input = ComplexUnit(Mul, SingleUnit("degree"), SingleUnit("minute"))
       val expectedUnit = ComplexUnit(Mul, SingleUnit("rad"), SingleUnit("s"))
-      val expectedResult = UnitTransformer(60*Math.PI/180, input, expectedUnit)
+      val expectedResult = UnitTransformation(60*Math.PI/180, expectedUnit)
       createTransformer(input) must beRight(expectedResult)
     }
 
@@ -35,7 +35,7 @@ class UnitTransformerTest extends Specification with Matchers {
 
       val expectedUnit = ComplexUnit(Mul, SingleUnit("rad"),
                                 ComplexUnit(Mul, SingleUnit("s"), SingleUnit("m\u00B3")))
-      val expectedResult = UnitTransformer(60*0.001*Math.PI/180, input, expectedUnit)
+      val expectedResult = UnitTransformation(60*0.001*Math.PI/180, expectedUnit)
       createTransformer(input) must beRight(expectedResult)
     }
 

@@ -1,6 +1,6 @@
 package unitconverter
 
-import cats.effect.{ExitCode, IO, IOApp}
+import cats.effect._
 import org.http4s._
 import org.http4s.dsl.io._
 import org.http4s.implicits._

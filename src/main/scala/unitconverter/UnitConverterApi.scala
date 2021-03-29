@@ -9,6 +9,9 @@ import unitconverter.model.{ErrorResult, TransformationResult}
 import org.http4s.circe._
 import unitconverter.parser.UnitParser
 
+/**
+ * HTTP end point processing for unit conversion.
+ */
 object  UnitConverterApi extends UnitParser {
 
 
@@ -16,15 +19,21 @@ object  UnitConverterApi extends UnitParser {
 
   def route: HttpRoutes[IO] = HttpRoutes.of[IO] {
     case GET ->  Root / "si" :? UnitsQueryParamMatcher(units) => {
-      processParameter(units)
+      convertUnit(units)
     }
   }
 
-  private def processParameter(param: String) = {
+  /**
+   * Process unit conversion request
+   *
+   * @param unitExpr string representation of one or multiple units
+   * @return Response with converted measurement unit
+   */
+  private def convertUnit(unitExpr: String): IO[Response[IO]] = {
      val resultOrError = for {
-         units <- parse(param)
-         tr <- UnitTransformer.createTransformer(units)
-       } yield TransformationResult(tr.to.name, tr.factor)
+         units <- parse(unitExpr)
+            tr <- UnitTransformation.createTransformer(units)
+       } yield TransformationResult(tr.unit.name, tr.factor)
 
      resultOrError match {
         case Right(tr) =>  Ok(tr.asJson)
