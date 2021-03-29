@@ -10,12 +10,18 @@ PARAMS: units - A unit string
 RETURNS: conversion - A conversion object
 ```
 
+Example request:
+http://127.0.0.1:8080/units/si?units=(degree/minute)
+
 ##Implementation
 The following libraries were used in the implementation:
- - Http4s and Cats Effect HTTP/Web server
- - Circe json
+ - Http4s and Cats Effect - HTTP/Web server
+ - Circe - json serialization
 
-Note: There is no Dockerfile. The docker image created by sbt is sufficient.
+Note: There is no own Dockerfile in the project. 
+The docker image created by sbt is sufficient. 
+In case the Dockerfile file is still needed, the Dockerfile for
+ the generated image is located in target/docker/stage
 
 
 ## Build
@@ -23,6 +29,7 @@ Note: There is no Dockerfile. The docker image created by sbt is sufficient.
 ```sbt package```
 
 Build docker image:
+
 ```sbt docker:publishLocal```
 
 ## Run tests
@@ -33,7 +40,5 @@ Build docker image:
 
 Run with docker:
 
-```docker run --rm --name unit-converter -i unit-converter:0.1```
+```docker run --rm --name unit-converter -p 8080:8080 -i unit-converter:0.1```
 
-Example request:
-http://127.0.0.1:8080/units/si?units=(degree/minute)
