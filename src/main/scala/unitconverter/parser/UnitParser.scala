@@ -5,11 +5,11 @@ import scala.util.parsing.combinator._
 
 /**
  * Parser for expression that combines multiple units. It transforms a string representation of a complex measurement
- * unit to a combination of [[ComplexUnit]] and [[SingleUnit]]
+ * unit to a combination of ComplexUnit and SingleUnit
  */
 trait UnitParser extends RegexParsers {
 
-  private def unit: Parser[MeasurementUnit]                   = """m\u00B2|m\u00B3|°|'|"|[a-zA-Z]+""".r ^^ { case name => SingleUnit(name) }
+  private def unit: Parser[MeasurementUnit]                   = "m\u00B2|m\u00B3|°|'|\"|[a-zA-Z]+".r ^^ { case name => SingleUnit(name) }
   private def mul: Parser[MeasurementUnit => MeasurementUnit] = "*" ~ factor ^^ { case op ~ b => ComplexUnit(CombineOperation.Mul, _, b) }
   private def div: Parser[MeasurementUnit => MeasurementUnit] = "/" ~ factor ^^ { case op ~ b => ComplexUnit(CombineOperation.Div, _, b) }
   private def term: Parser[MeasurementUnit]                   = factor ~ rep(mul | div) ^^ { case a ~ b => b.foldLeft(a)((acc,f) => f(acc)) }

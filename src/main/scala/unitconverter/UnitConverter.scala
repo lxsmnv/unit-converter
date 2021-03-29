@@ -19,7 +19,7 @@ object UnitConverter extends IOApp {
   override def run(args: List[String]): IO[ExitCode] =
     // Create and run Http4s server
     BlazeServerBuilder[IO](forkJoinPool)
-      .bindHttp()
+      .bindHttp(8080, "0.0.0.0")
       .withNio2(true)
       .withHttpApp(createRoutes())
       .serve

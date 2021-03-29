@@ -15,6 +15,9 @@ The following libraries were used in the implementation:
  - Http4s and Cats Effect HTTP/Web server
  - Circe json
 
+Note: There is no Dockerfile. The docker image created by sbt is sufficient.
+
+
 ## Build
 
 ```sbt package```
