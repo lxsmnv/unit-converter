@@ -23,8 +23,22 @@ class UnitParserTest extends Specification with Matchers {
       parser.parse("(degree*minute)") must beRight(ComplexUnit(Mul, SingleUnit("degree"), SingleUnit("minute")))
     }
 
+    "parse all units by name" in {
+      val units = "minute*hour*day*degree*arcminute*arcsecond*hectarelitre*tonne"
+      parser.parse(units) must beRight()
+    }
+
+    "parse all units by symbol" in {
+      val units = "min*h*d*time*°*'*\"*ha*L*t"
+      parser.parse(units) must beRight()
+    }
+
     "fail for invalid unit name" in {
       parser.parse("_") must beLeft()
      }
+
+    "fail for invalid operation" in {
+      parser.parse("rad+s") must beLeft()
+    }
   }
 }

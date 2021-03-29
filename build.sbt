@@ -19,6 +19,7 @@ libraryDependencies += "org.http4s" %% "http4s-circe" % "0.21.6"
 libraryDependencies += "org.http4s" %% "http4s-dsl" % "0.21.6"
 libraryDependencies += "org.http4s" %% "http4s-blaze-server" % "0.21.6"
 libraryDependencies += "org.scala-lang.modules" %% "scala-parser-combinators" % "1.1.2"
+libraryDependencies += "org.specs2" %% "specs2-cats" % "4.9.4" % Test
 libraryDependencies += "org.specs2" %% "specs2-core" % "4.10.6" % Test
 
 

@@ -15,7 +15,7 @@ import unitconverter.parser.UnitParser
 object  UnitConverterApi extends UnitParser {
 
 
-  object UnitsQueryParamMatcher extends QueryParamDecoderMatcher[String]("units")
+  private object UnitsQueryParamMatcher extends QueryParamDecoderMatcher[String]("units")
 
   def route: HttpRoutes[IO] = HttpRoutes.of[IO] {
     case GET ->  Root / "si" :? UnitsQueryParamMatcher(units) => {
