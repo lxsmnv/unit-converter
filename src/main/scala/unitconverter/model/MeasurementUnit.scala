@@ -12,26 +12,14 @@ sealed trait MeasurementUnit {
    * Measurement unit name
    */
   val name: String
-
-  /**
-   * Other name that can be used for this unit e.g. short form
-   */
-  val alias: Option[String]
-
-  /**
-   *
-   * @return All known names for the unit
-   */
-  def names: Seq[String] = Seq(Some(name), alias).flatten
 }
 
 /**
  * Single unit
  *
  * @param name unit name
- * @param alias unit alias if exists
  */
-case class SingleUnit(name: String, alias: Option[String] = None) extends MeasurementUnit
+case class SingleUnit(name: String) extends MeasurementUnit
 
 /**
  * Operations used to combine units
