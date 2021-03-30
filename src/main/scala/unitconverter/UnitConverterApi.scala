@@ -8,6 +8,7 @@ import org.http4s.dsl.io._
 import unitconverter.model.{ErrorResult, TransformationResult}
 import org.http4s.circe._
 import unitconverter.parser.UnitParser
+import unitconverter.transformer.UnitTransformation
 
 /**
  * HTTP end point processing for unit conversion.
@@ -32,7 +33,7 @@ object  UnitConverterApi extends UnitParser {
   private def convertUnit(unitExpr: String): IO[Response[IO]] = {
      val resultOrError = for {
          units <- parse(unitExpr)
-            tr <- UnitTransformation.createTransformer(units)
+            tr <- UnitTransformation.createTransformation(units)
        } yield TransformationResult(tr.unit.name, tr.factor)
 
      resultOrError match {

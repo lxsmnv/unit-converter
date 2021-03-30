@@ -1,4 +1,4 @@
-package unitconverter
+package unitconverter.transformer
 
 import unitconverter.model.CombineOperation.{Div, Mul}
 import unitconverter.model.{ComplexUnit, MeasurementUnit, SingleUnit}
@@ -45,13 +45,13 @@ object UnitTransformation {
    * @param unit
    * @return [[UnitTransformation]]
    */
-  def createTransformer(unit: MeasurementUnit): Either[String, UnitTransformation] =
+  def createTransformation(unit: MeasurementUnit): Either[String, UnitTransformation] =
     unit match {
       case SingleUnit(name) => conversionTable.get(name).toRight[String](s"Unit $name not found")
       case ComplexUnit(op, left, right)  =>
             for {
-              l <- createTransformer(left)
-              r <- createTransformer(right)
+              l <- createTransformation(left)
+              r <- createTransformation(right)
               f = op match {
                 case Mul => l.factor * r.factor
                 case Div => l.factor / r.factor
