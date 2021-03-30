@@ -13,7 +13,7 @@ RETURNS: conversion - A conversion object
 Example request:
 http://127.0.0.1:8080/units/si?units=(degree/minute)
 
-##Implementation
+## Implementation
 The following libraries were used in the implementation:
  - Http4s and Cats Effect - HTTP/Web server
  - Circe - json serialization
