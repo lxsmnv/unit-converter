@@ -9,11 +9,11 @@ import scala.util.parsing.combinator._
  */
 trait UnitParser extends RegexParsers {
 
-  private def unit: Parser[MeasurementUnit]                   = "m\u00B2|m\u00B3|°|'|\"|[a-zA-Z]+".r ^^ { case name => SingleUnit(name) }
-  private def mul: Parser[MeasurementUnit => MeasurementUnit] = "*" ~ factor ^^ { case op ~ b => ComplexUnit(CombineOperation.Mul, _, b) }
-  private def div: Parser[MeasurementUnit => MeasurementUnit] = "/" ~ factor ^^ { case op ~ b => ComplexUnit(CombineOperation.Div, _, b) }
-  private def term: Parser[MeasurementUnit]                   = factor ~ rep(mul | div) ^^ { case a ~ b => b.foldLeft(a)((acc,f) => f(acc)) }
-  private def factor: Parser[MeasurementUnit]                 = unit | "(" ~> term <~ ")"
+  final private def unit: Parser[MeasurementUnit]                   = "m\u00B2|m\u00B3|°|'|\"|[a-zA-Z]+".r ^^ { case name => SingleUnit(name) }
+  final private def mul: Parser[MeasurementUnit => MeasurementUnit] = "*" ~ factor ^^ { case op ~ b => ComplexUnit(CombineOperation.Mul, _, b) }
+  final private def div: Parser[MeasurementUnit => MeasurementUnit] = "/" ~ factor ^^ { case op ~ b => ComplexUnit(CombineOperation.Div, _, b) }
+  final private def term: Parser[MeasurementUnit]                   = factor ~ rep(mul | div) ^^ { case a ~ b => b.foldLeft(a)((acc,f) => f(acc)) }
+  final private def factor: Parser[MeasurementUnit]                 = unit | "(" ~> term <~ ")"
 
   /**
    * Parse complex unit expression

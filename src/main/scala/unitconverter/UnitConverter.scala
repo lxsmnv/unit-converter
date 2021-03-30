@@ -16,10 +16,13 @@ object UnitConverter extends IOApp {
   implicit val es = java.util.concurrent.ForkJoinPool.commonPool
   implicit val forkJoinPool = scala.concurrent.ExecutionContext.fromExecutor(es)
 
+  val defaultHost = "0.0.0.0"
+  val defaultPort = 8080
+
   override def run(args: List[String]): IO[ExitCode] =
     // Create and run Http4s server
     BlazeServerBuilder[IO](forkJoinPool)
-      .bindHttp(8080, "0.0.0.0")
+      .bindHttp(defaultPort, defaultHost)
       .withNio2(true)
       .withHttpApp(createRoutes())
       .serve
