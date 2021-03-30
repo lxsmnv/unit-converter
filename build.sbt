@@ -21,6 +21,7 @@ libraryDependencies += "org.http4s" %% "http4s-blaze-server" % "0.21.6"
 libraryDependencies += "org.scala-lang.modules" %% "scala-parser-combinators" % "1.1.2"
 libraryDependencies += "org.specs2" %% "specs2-cats" % "4.9.4" % Test
 libraryDependencies += "org.specs2" %% "specs2-core" % "4.10.6" % Test
+libraryDependencies += "org.specs2" %% "specs2-http4s" % "1.0.0" % Test
 
 dockerExposedPorts := Seq(8080)
 scalacOptions ++= Seq("-deprecation", "-Ymacro-annotations")
