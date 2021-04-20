@@ -18,12 +18,6 @@ The following libraries were used in the implementation:
  - Http4s and Cats Effect - HTTP/Web server
  - Circe - json serialization
 
-Note: There is no own Dockerfile in the project. 
-The docker image created by sbt is sufficient. 
-In case the Dockerfile file is still needed, the Dockerfile for
- the generated image is located in [project directory]/target/docker/stage/Dockerfile
-
-
 ## Build
 
 ```sbt package```
