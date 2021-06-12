@@ -49,8 +49,6 @@ case class ComplexUnit(op: CombineOperation,
     case Mul => s"(${left.name}*${right.name})"
     case Div => s"(${left.name}/${right.name})"
   }
-
-  val alias: Option[String] = None
 }
 
 
